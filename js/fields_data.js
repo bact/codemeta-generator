@@ -42,7 +42,13 @@ function insertLicenseElement(licenseId) {
 }
 
 function validateLicense(e) {
-    // continue only if Enter/Tab key is pressed
+    var licenseField = document.getElementById('license');
+    var license = licenseField.value.trim();
+    if (!license) {
+        return;
+    }
+
+    // Continue only if Enter/Tab key is pressed
     if (e.key && e.key !== "Enter" && e.keyCode !== "Tab") {
         return;
     }
@@ -50,8 +56,6 @@ function validateLicense(e) {
     // Maybe it's because of the datalist. But the above condition should
     // work in either case.
 
-    var licenseField = document.getElementById('license');
-    var license = licenseField.value;
     if (SPDX_LICENSE_IDS !== null && SPDX_LICENSE_IDS.indexOf(license) == -1) {
         licenseField.setCustomValidity('Unknown license id');
     }
