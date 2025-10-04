@@ -199,8 +199,18 @@ function fieldToLower(event) {
 }
 
 function initCallbacks() {
+    // While Chrome/Safari confirms the value selection from the datalist
+    // with the 'change' event, Firefox needs 'input' event (from pressing
+    // Enter/Tab) to confirm the value selection.
+    // To keep behaviour consistent across browsers, we listen to both events
+    // and manually trigger the 'input' event on 'change'.
+    // This works with Firefox, Safari, and Chrome-based browsers.
     document.querySelector('#license')
-        .addEventListener('change', validateLicense);
+        .addEventListener('input', validateLicense);
+    document.querySelector('#license')
+        .addEventListener('change', (e) => {
+            e.target.dispatchEvent(new Event('input', { bubbles: true }));
+    });
 
     document.querySelector('#generateCodemetaV2').disabled = false;
     document.querySelector('#generateCodemetaV2')
