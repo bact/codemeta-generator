@@ -105,8 +105,8 @@ const splittedCodemetaFields = [
     ['programmingLanguage', ','],
     ['runtimePlatform', ','],
     ['operatingSystem', ','],
-    ['softwareRequirements', '\n', generateUri, importUri],
-    ['relatedLink', '\n'],
+    ['softwareRequirements', /[\n ]/, generateUri, importUri],
+    ['relatedLink', /[\n ]/],
 ]
 
 // Names of codemeta properties with a matching HTML field name,
