@@ -175,6 +175,8 @@ See top-level LICENSE file for more information
                 <br />
                 <textarea rows="4" cols="50"
                     name="relatedLink" id="relatedLink"></textarea>
+                <span class="field-description" id="relatedLink_descr">one link per line</span>
+            </p>
         </fieldset>
 
         <fieldset id="fieldsetRuntime" class="leafFieldset">
@@ -333,9 +335,9 @@ Bugfixes: that and this." ></textarea>
 
     </form>
     <form>
-      <input type="button" id="generateCodemetaV3" value="Generate codemeta.json v3.0" disabled
-             title="Creates a codemeta.json v3.0 file below, from the information provided above." />
-      <input type="button" id="generateCodemetaV2" value="Generate codemeta.json v2.0" disabled
+        <input type="button" id="generateCodemetaV3" value="Generate codemeta.json v3.0" disabled
+            title="Creates a codemeta.json v3.0 file below, from the information provided above." />
+        <input type="button" id="generateCodemetaV2" value="Generate codemeta.json v2.0" disabled
             title="Creates a codemeta.json v2.0 file below, from the information provided above." />
         <input type="button" id="resetForm" value="Reset form"
             title="Erases all fields." />
@@ -343,8 +345,8 @@ Bugfixes: that and this." ></textarea>
             title="Checks the codemeta.json file below is valid, and displays errors." />
         <input type="button" id="importCodemeta" value="Import codemeta.json" disabled
             title="Fills the fields above based on the codemeta.json file below." />
-        <a id="downloadCodemeta"><input type="button" value="Download codemeta.json" disabled
-                  title="Download the codemeta.json file as displayed below." /></a>
+        <input type="button" id="downloadCodemeta" value="Download codemeta.json" disabled
+                  title="Download the codemeta.json file as displayed below." />
     </form>
 
     <p id="errorMessage">
