@@ -213,9 +213,9 @@ function initCallbacks() {
             const datalist = document.getElementById('licenses');
             const options = Array.from(datalist.options);
             // Find a case-insensitive match in the datalist options
-            const trimmedValue = licenseField.value.trim().toLowerCase();
+            const normalizedLicenseValue = licenseField.value.trim().toLowerCase();
             const match = options.find(option =>
-                option.value.toLowerCase() === trimmedValue);
+                option.value.toLowerCase() === normalizedLicenseValue);
             if (match) {
                 // Replace the input value with the correctly cased value
                 licenseField.value = match.value;
