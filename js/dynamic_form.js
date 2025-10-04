@@ -214,13 +214,15 @@ function initCallbacks() {
             const options = Array.from(datalist.options);
             // Find a case-insensitive match in the datalist options
             const normalizedLicenseValue = licenseField.value.trim().toLowerCase();
-            const match = options.find(option =>
-                option.value.toLowerCase() === normalizedLicenseValue);
-            if (match) {
-                // Replace the input value with the correctly cased value
-                licenseField.value = match.value;
+            if (normalizedLicenseValue) {
+                const match = options.find(option =>
+                    option.value.toLowerCase() === normalizedLicenseValue);
+                if (match) {
+                    // Replace the input value with the correctly cased value
+                    licenseField.value = match.value;
+                }
+                licenseField.dispatchEvent(new Event('input', { bubbles: true }));
             }
-            licenseField.dispatchEvent(new Event('input', { bubbles: true }));
         });
 
     document.querySelector('#generateCodemetaV2').disabled = false;
