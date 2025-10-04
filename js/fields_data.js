@@ -42,9 +42,10 @@ function insertLicenseElement(licenseId) {
 }
 
 function validateLicense(e) {
+    // If license is empty or SPDX_LICENSE_IDS is not loaded yet, do nothing
     var licenseField = document.getElementById('license');
     var license = licenseField.value.trim();
-    if (!license) {
+    if (!license || !SPDX_LICENSE_IDS || SPDX_LICENSE_IDS.length <= 0) {
         return;
     }
 
@@ -56,22 +57,28 @@ function validateLicense(e) {
     // Maybe it's because of the datalist. But the above condition should
     // work in either case.
 
-    if (SPDX_LICENSE_IDS !== null && SPDX_LICENSE_IDS.indexOf(license) == -1) {
+    // Find a case-insensitive match in the SPDX License List
+    const normalizedLicenseValue = license.toLowerCase();
+    const match = SPDX_LICENSE_IDS.find(id =>
+        id.toLowerCase() === normalizedLicenseValue);
+    if (!match) {
         licenseField.setCustomValidity('Unknown license id');
     }
     else {
+        licenseField.setCustomValidity('');
+        license = match; // Use the correctly cased value
+
+        // Add the license if it's not already added
         let selectedLicenses = document.getElementById("selected-licenses");
-        let existingLicense = Array.from(selectedLicenses.getElementsByClassName("license-id"))
+        let duplicated = Array.from(selectedLicenses.getElementsByClassName("license-id"))
             .some(el => el.textContent === license);
-        // Only add the license if it's not already added
-        if (!existingLicense) {
-            insertLicenseElement(license);
+        if (duplicated) {
             licenseField.value = "";
-            licenseField.setCustomValidity('');
-            generateCodemeta();
         }
         else {
+            insertLicenseElement(license);
             licenseField.value = "";
+            generateCodemeta();
         }
     }
 }

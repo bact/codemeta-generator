@@ -209,20 +209,7 @@ function initCallbacks() {
         .addEventListener('input', validateLicense);
     document.querySelector('#license')
         .addEventListener('change', (e) => {
-            const licenseField = e.target;
-            const datalist = document.getElementById('licenses');
-            const options = Array.from(datalist.options);
-            // Find a case-insensitive match in the datalist options
-            const normalizedLicenseValue = licenseField.value.trim().toLowerCase();
-            if (normalizedLicenseValue) {
-                const match = options.find(option =>
-                    option.value.toLowerCase() === normalizedLicenseValue);
-                if (match) {
-                    // Replace the input value with the correctly cased value
-                    licenseField.value = match.value;
-                }
-                licenseField.dispatchEvent(new Event('input', { bubbles: true }));
-            }
+            e.target.dispatchEvent(new Event('input', { bubbles: true }));
         });
 
     document.querySelector('#generateCodemetaV2').disabled = false;
