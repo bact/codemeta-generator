@@ -63,7 +63,6 @@ function validateLicense(e) {
         let selectedLicenses = document.getElementById("selected-licenses");
         let existingLicense = Array.from(selectedLicenses.getElementsByClassName("license-id"))
             .some(el => el.textContent === license);
-
         // Only add the license if it's not already added
         if (!existingLicense) {
             insertLicenseElement(license);
