@@ -50,26 +50,35 @@ function validateLicense(e) {
         return;
     }
 
-    //  Continue only if Enter/Tab key is pressed
-    //if (e.key && e.key !== "Enter" && e.keyCode !== "Tab") {
-    //    return;
-    //}
+    // Convert to correct casing,
+    // so the value can be found in SPDX_LICENSE_IDS and get inserted.
+    // Do this only on 'change' event (change is committed) or on 'keydown'
+    // event of Enter/Tab key to avoid interfering while user is still typing.
+    if ((e.type === "change") ||
+        (e.type === "keydown" && (e.key === "Enter" || e.key === "Tab"))) {
+        const match = SPDX_LICENSE_IDS.find(id =>
+            id.toLowerCase() === license.toLowerCase());
+        if (match) {
+            license = match;
+            licenseField.value = match;
+        }
+    }
+    // Avoid premature validation/insertion
+    // (e.g., immediately insert "MIT" when user in between typing "MIT-0")
+    else if (e.key || (e.inputType && e.inputType.startsWith("insertText"))) {
+        return;
+    }
 
-    // Find a case-insensitive match in the SPDX License List
-    const normalizedLicenseValue = license.toLowerCase();
-    const match = SPDX_LICENSE_IDS.find(id =>
-        id.toLowerCase() === normalizedLicenseValue);
-    if (!match) {
+    // Validation and insertion
+    if (SPDX_LICENSE_IDS.indexOf(license) == -1) {
         licenseField.setCustomValidity('Unknown license id');
     }
     else {
         licenseField.setCustomValidity('');
-        license = match; // Use the correctly cased value
-
-        // Add the license if it's not already added
-        let selectedLicenses = document.getElementById("selected-licenses");
-        let duplicated = Array.from(selectedLicenses.getElementsByClassName("license-id"))
+        const selectedLicenses = document.getElementById("selected-licenses");
+        const duplicated = Array.from(selectedLicenses.getElementsByClassName("license-id"))
             .some(el => el.textContent === license);
+        // Only add the license if it's not already added
         if (duplicated) {
             licenseField.value = "";
         }
@@ -77,6 +86,10 @@ function validateLicense(e) {
             insertLicenseElement(license);
             licenseField.value = "";
             generateCodemeta();
+
+            // Remove focus briefly to hide datalist in Chrome after insertion
+            licenseField.blur();
+            setTimeout(() => licenseField.focus(), 0);
         }
     }
 }
