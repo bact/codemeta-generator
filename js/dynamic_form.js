@@ -205,10 +205,12 @@ function initCallbacks() {
     document.querySelector('#license')
         .addEventListener('change', validateLicense);
     document.querySelector('#license')
-        .addEventListener('input', (e) => {
-            if (e.key === "Enter" || e.key === "Tab" || !e.key)
+        .addEventListener('keyup', (e) => {
+            if (e.key === "Enter" || e.key === "Tab")
                 e.target.dispatchEvent(new Event('change', { bubbles: true }));
         });
+    document.querySelector('#license')
+        .addEventListener('blur', validateLicense);
 
     document.querySelector('#generateCodemetaV2').disabled = false;
     document.querySelector('#generateCodemetaV2')

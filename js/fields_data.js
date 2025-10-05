@@ -45,17 +45,15 @@ function validateLicense(e) {
     // If license is empty or SPDX_LICENSE_IDS is not loaded yet, do nothing
     var licenseField = document.getElementById('license');
     var license = licenseField.value.trim();
-    if (!license || !SPDX_LICENSE_IDS || SPDX_LICENSE_IDS.length <= 0) {
+    if (!license || !SPDX_LICENSE_IDS) {
+        licenseField.setCustomValidity('');
         return;
     }
 
-    // Continue only if Enter/Tab key is pressed
-    if (e.key && e.key !== "Enter" && e.keyCode !== "Tab") {
-        return;
-    }
-    // Note: For some reason e.keyCode is undefined when Enter/Tab key is pressed.
-    // Maybe it's because of the datalist. But the above condition should
-    // work in either case.
+    //  Continue only if Enter/Tab key is pressed
+    //if (e.key && e.key !== "Enter" && e.keyCode !== "Tab") {
+    //    return;
+    //}
 
     // Find a case-insensitive match in the SPDX License List
     const normalizedLicenseValue = license.toLowerCase();
