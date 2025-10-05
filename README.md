@@ -37,7 +37,7 @@ Software Heritage (SWH) archive, which will improve findability in searches.
 
 ### Functionalities
 
-- helpers while completing the form, for example a reference list of SDPX
+- helpers while completing the form, for example a reference list of SPDX
   licenses
 - a validation mechanism after submission
 - the possibility to use all the CodeMeta terms and Schema.org terms
@@ -99,4 +99,4 @@ npx cypress@9.7.0 run
 
 ## Contributed by
 
-![Image description](https://annex.softwareheritage.org/public/logo/software-heritage-logo-title-motto.svg)
+![Software Heritage](https://annex.softwareheritage.org/public/logo/software-heritage-logo-title-motto.svg)
