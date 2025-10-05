@@ -52,6 +52,7 @@ function validateLicense(e) {
 
     // Convert to correct casing,
     // so the value can be found in SPDX_LICENSE_IDS and get inserted.
+    // User can type "mit" and hit Enter to get "MIT" inserted.
     // Do this only on 'change' event (change is committed) or on 'keydown'
     // event of Enter/Tab key to avoid interfering while user is still typing.
     if ((e.type === "change") ||
