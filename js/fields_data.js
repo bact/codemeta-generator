@@ -50,7 +50,7 @@ function validateLicense(e) {
     }
 
     // Continue only if Enter/Tab key is pressed
-    if (e.type === "input" && e.key && e.key !== "Enter" && e.keyCode !== "Tab") {
+    if (e.key && e.key !== "Enter" && e.keyCode !== "Tab") {
         return;
     }
     // Note: For some reason e.keyCode is undefined when Enter/Tab key is pressed.
