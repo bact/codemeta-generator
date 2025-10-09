@@ -49,10 +49,8 @@ function validateLicense(e) {
         return;
     }
 
-    // Treat empty value or the placeholder as no input
-    var license = (licenseField.value || '').trim();
-    var placeholder = (licenseField.placeholder || '').trim();
-    if (!license || license === placeholder) {
+    var license = licenseField.value.trim();
+    if (!license) {
         // Nothing to validate - don't proceed
         return;
     }
