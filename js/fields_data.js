@@ -25,7 +25,6 @@ function initSpdx() {
         option.label = `${license['licenseId']}: ${license['name']}`;
         datalist.appendChild(option);
     });
-
 }
 
 function insertLicenseElement(licenseId) {
@@ -43,9 +42,7 @@ function insertLicenseElement(licenseId) {
 
 function validateLicense(e) {
     var licenseField = document.getElementById('license');
-
-    // Reset previous message
-    licenseField.setCustomValidity('');
+    licenseField.setCustomValidity(''); // Reset previous message
 
     if (!SPDX_LICENSE_IDS) {
         // SPDX data not loaded yet - can't validate - don't proceed
