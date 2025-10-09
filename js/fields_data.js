@@ -43,10 +43,20 @@ function insertLicenseElement(licenseId) {
 
 function validateLicense(e) {
     var licenseField = document.getElementById('license');
-    licenseField.setCustomValidity(''); // Reset previous message
 
-    var license = licenseField.value.trim();
-    if (!license || !SPDX_LICENSE_IDS) {
+    // Reset previous message
+    licenseField.setCustomValidity('');
+
+    if (!SPDX_LICENSE_IDS) {
+        // SPDX data not loaded yet - can't validate - don't proceed
+        return;
+    }
+
+    // Treat empty value or the placeholder as no input
+    var license = (licenseField.value || '').trim();
+    var placeholder = (licenseField.placeholder || '').trim();
+    if (!license || license === placeholder) {
+        // Nothing to validate - don't proceed
         return;
     }
 
