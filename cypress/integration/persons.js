@@ -889,6 +889,76 @@ describe('Multiple authors', function () {
         cy.get('#author_1_endDate_0').should('have.value', '2024-04-03');
         cy.get('#author_2_givenName').should('have.value', 'Joe');
     });
+
+    it('can remove the first one and reindexes remaining ones', function() {
+        cy.get('#name').type('My Test Software');
+
+        cy.get('#author_add').click();
+        cy.get('#author_add').click();
+        cy.get('#author_nb').should('have.value', '2');
+
+        cy.get('#author_1_givenName').type('Alice');
+        cy.get('#author_2_givenName').type('Bob');
+
+        cy.get('#author_1_remove').click();
+
+        cy.get('#author_nb').should('have.value', '1');
+        cy.get('#author_1_givenName').should('have.value', 'Bob');
+
+        cy.get('#generateCodemetaV2').click();
+        cy.get('#codemetaText').then((elem) => JSON.parse(elem.text()))
+            .should('deep.equal', {
+                "@context": "https://doi.org/10.5063/schema/codemeta-2.0",
+                "type": "SoftwareSourceCode",
+                "name": "My Test Software",
+                "author": [
+                    {
+                        "id": "_:author_1",
+                        "type": "Person",
+                        "givenName": "Bob"
+                    }
+                ],
+            });
+    });
+
+    it('can remove a middle one and reindexes remaining ones', function() {
+        cy.get('#name').type('My Test Software');
+
+        cy.get('#author_add').click();
+        cy.get('#author_add').click();
+        cy.get('#author_add').click();
+        cy.get('#author_nb').should('have.value', '3');
+
+        cy.get('#author_1_givenName').type('Alice');
+        cy.get('#author_2_givenName').type('Bob');
+        cy.get('#author_3_givenName').type('Carol');
+
+        cy.get('#author_2_remove').click();
+
+        cy.get('#author_nb').should('have.value', '2');
+        cy.get('#author_1_givenName').should('have.value', 'Alice');
+        cy.get('#author_2_givenName').should('have.value', 'Carol');
+
+        cy.get('#generateCodemetaV2').click();
+        cy.get('#codemetaText').then((elem) => JSON.parse(elem.text()))
+            .should('deep.equal', {
+                "@context": "https://doi.org/10.5063/schema/codemeta-2.0",
+                "type": "SoftwareSourceCode",
+                "name": "My Test Software",
+                "author": [
+                    {
+                        "id": "_:author_1",
+                        "type": "Person",
+                        "givenName": "Alice"
+                    },
+                    {
+                        "id": "_:author_2",
+                        "type": "Person",
+                        "givenName": "Carol"
+                    }
+                ],
+            });
+    });
 });
 
 describe('Contributors', function () {

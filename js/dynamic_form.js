@@ -16,6 +16,19 @@ const personFields = [
     'affiliation',
 ];
 
+// Helper to attach a click handler to a control inside a person fieldset.
+function attachPersonControl(personPrefix, suffix, handler) {
+    const sel = `#${personPrefix}_${suffix}`;
+    const el = document.querySelector(sel);
+    if (!el) return;
+    el.addEventListener('click', (evt) => {
+        const fs = evt.target.closest('fieldset.person');
+        if (!fs) return;
+        const curId = parseInt(fs.id.split('_').pop(), 10);
+        handler(fs, curId);
+    });
+}
+
 function createPersonFieldset(personPrefix, legend) {
     // Creates a fieldset containing inputs for informations about a person
     var fieldset = document.createElement("fieldset")
@@ -29,6 +42,7 @@ function createPersonFieldset(personPrefix, legend) {
         <div class="moveButtons">
             <input type="button" id="${personPrefix}_moveToLeft" value="<" class="moveToLeft"
                 title="Moves this person to the left." />
+            <input type="button" id="${personPrefix}_remove" value="X" title="Remove this person" />
             <input type="button" id="${personPrefix}_moveToRight" value=">" class="moveToRight"
                 title="Moves this person to the right." />
         </div>
@@ -70,12 +84,13 @@ function addPersonWithId(container, prefix, legend, id) {
 
     container.appendChild(fieldset);
 
-    document.querySelector(`#${personPrefix}_moveToLeft`)
-        .addEventListener('click', () => movePerson(prefix, id, "left"));
-    document.querySelector(`#${personPrefix}_moveToRight`)
-        .addEventListener('click', () => movePerson(prefix, id, "right"));
-    document.querySelector(`#${personPrefix}_role_add`)
-        .addEventListener('click', () => addRole(personPrefix));
+    // Attach event listener to the control using an ID at click time,
+    // as the ID will change when persons are removed.
+    // fs = fieldset, curId = current person ID (1-based)
+    attachPersonControl(personPrefix, 'moveToLeft', (fs, curId) => movePerson(prefix, curId, 'left'));
+    attachPersonControl(personPrefix, 'moveToRight', (fs, curId) => movePerson(prefix, curId, 'right'));
+    attachPersonControl(personPrefix, 'role_add', (fs) => addRole(fs.id));
+    attachPersonControl(personPrefix, 'remove', (fs, curId) => removePersonAt(prefix, curId));
 }
 
 function movePerson(prefix, id1, direction) {
@@ -128,6 +143,50 @@ function removePerson(prefix) {
     document.querySelector(`#${prefix}_${personId}`).remove();
 
     setNbPersons(prefix, personId - 1);
+}
+
+function removePersonAt(prefix, id) {
+    var nb = getNbPersons(prefix);
+    if (id < 1 || id > nb) return;
+
+    var node = document.querySelector(`#${prefix}_${id}`);
+    if (node) node.remove();
+
+    // Shift following persons' ids and element ids/names
+    for (var i = id + 1; i <= nb; i++) {
+        var from = document.querySelector(`#${prefix}_${i}`);
+        if (!from) continue;
+        var toId = i - 1;
+        from.id = `${prefix}_${toId}`;
+
+        // Update the legend text (e.g. "Author #3" -> "Author #2")
+        var legendEl = from.querySelector('legend');
+        if (legendEl) {
+            legendEl.textContent = legendEl.textContent.replace(/#\d+$/, `#${toId}`);
+        }
+
+        // Update child input/label ids and names
+        var nodes = from.querySelectorAll('[id], label[for]');
+        nodes.forEach((el) => {
+            if (el.id) {
+                var oldId = el.id;
+                var newId = oldId.replace(`_${i}_`, `_${toId}_`).replace(`_${i}`, `_${toId}`);
+                el.id = newId;
+                if (el.name) {
+                    el.name = el.name.replace(`_${i}_`, `_${toId}_`).replace(`_${i}`, `_${toId}`);
+                }
+            }
+            if (el.getAttribute && el.getAttribute('for')) {
+                var oldFor = el.getAttribute('for');
+                var newFor = oldFor.replace(`_${i}_`, `_${toId}_`).replace(`_${i}`, `_${toId}`);
+                el.setAttribute('for', newFor);
+            }
+        });
+    }
+
+    setNbPersons(prefix, nb - 1);
+    // Form was changed; regenerate
+    generateCodemeta();
 }
 
 // Initialize a group of persons (authors, contributors) on page load.
