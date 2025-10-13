@@ -72,7 +72,7 @@ function validateDocument(doc) {
 
 
 function parseAndValidateCodemeta(showPopup) {
-    var codemetaText = document.querySelector('#codemetaText').innerText;
+    var codemetaText = document.querySelector('#codemetaText').value;
     var doc;
 
     try {

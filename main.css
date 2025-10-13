@@ -78,6 +78,13 @@ input[type=URL] {
     border: 1px solid black;
 }
 
+/* Make the codemeta text area plain text, monospace and preserve whitespace */
+#codemetaText {
+    font-family: monospace;
+    white-space: pre; /* preserve newlines and spacing */
+    resize: vertical;
+}
+
 #errorMessage {
     color: red;
 }

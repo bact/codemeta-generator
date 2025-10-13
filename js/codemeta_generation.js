@@ -310,7 +310,7 @@ async function generateCodemeta(codemetaVersion = "2.0") {
         inputForm.reportValidity();
     }
 
-    document.querySelector('#codemetaText').innerText = codemetaText;
+    document.querySelector('#codemetaText').value = codemetaText;
 
 
     // Run validator on the exported value, for extra validation.
@@ -495,13 +495,13 @@ async function importCodemeta() {
 function loadStateFromStorage() {
     var codemetaText = sessionStorage.getItem('codemetaText')
     if (codemetaText) {
-        document.querySelector('#codemetaText').innerText = codemetaText;
+        document.querySelector('#codemetaText').value = codemetaText;
         importCodemeta();
     }
 }
 
 function downloadCodemeta() {
-    const codemetaText = document.querySelector('#codemetaText').innerText;
+    const codemetaText = document.querySelector('#codemetaText').value;
     const blob = new Blob([codemetaText], {type: 'application/json'});
     const url = URL.createObjectURL(blob);
     document.querySelector('#downloadCodemeta').href = url;
